@@ -1,26 +1,58 @@
 @import "tailwindcss";
+@plugin "@tailwindcss/typography";
 
 :root {
+  /*TODO: removed the use of these variables, will we need them?*/
   --background: #ffffff;
   --foreground: #171717;
+
+  --green-dark: #41634a;
+  --green-medium: #5a7e64;
+  --green-desaturated: #7f8463;
+  --green-desaturated-light: #B3B79F;
+  --terracota-dark: #db7f50;
+  --terracota-medium: #e9a37f;
+  --terracota-light: #f6c8ae;
+  --terracota-lighter: #ffedd8;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+
+  --font-title: var(--font-playfair-display);
+  --font-body: var(--font-literata);
+
+  --color-green-dark: var(--green-dark);
+  --color-green-medium: var(--green-medium);
+  --color-green-desaturated: var(--green-desaturated);
+  --color-green-desaturated-light: var(--green-desaturated-light);
+  --color-terracota-dark: var(--terracota-dark);
+  --color-terracota-medium: var(--terracota-medium);
+  --color-terracota-light: var(--terracota-light);
+  --color-terracota-lighter: var(--terracota-lighter);
 }
 
-@media (prefers-color-scheme: dark) {
+/* TODO: Will we add dark mode? */
+/* @media (prefers-color-scheme: dark) {
   :root {
     --background: #0a0a0a;
     --foreground: #ededed;
   }
-}
+} */
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  /*TODO: removed the use of these variables, will we need them?*/
+  /* background: var(--background);
+  color: var(--foreground); */
+  font-family: var(--font-literata);
+}
+
+.prose h1,
+.prose h2,
+.prose h3,
+.prose h4,
+.prose h5,
+.prose h6 {
+  font-family: var(--font-playfair-display);
 }
