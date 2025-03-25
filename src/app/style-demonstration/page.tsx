@@ -36,7 +36,7 @@ export default function Page() {
       <h2>Colors: </h2>
       <div className="grid grid-cols-4">
         <div className="h-8 bg-green-dark text-white">bg-green-dark</div>
-        <div className="h-8 bg-green-mediun text-white">bg-green-mediun</div>
+        <div className="h-8 bg-green-medium text-white">bg-green-medium</div>
         <div className="h-8 bg-green-desaturated text-white">
           bg-green-desaturated
         </div>
@@ -52,7 +52,7 @@ export default function Page() {
       </div>
       <div className="grid grid-cols-4">
         <div className="h-8 text-green-dark">text-green-dark</div>
-        <div className="h-8 text-green-mediun">text-green-mediun</div>
+        <div className="h-8 text-green-medium">text-green-medium</div>
         <div className="h-8 text-green-desaturated">text-green-desaturated</div>
         <div className="h-8 "></div>
         <div className="h-8 text-terracota-dark">text-terracota-dark</div>
