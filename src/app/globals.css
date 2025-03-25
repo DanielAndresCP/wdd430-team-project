@@ -9,6 +9,7 @@
   --green-dark: #41634a;
   --green-medium: #5a7e64;
   --green-desaturated: #7f8463;
+  --green-desaturated-light: #B3B79F;
   --terracota-dark: #db7f50;
   --terracota-medium: #e9a37f;
   --terracota-light: #f6c8ae;
@@ -25,6 +26,7 @@
   --color-green-dark: var(--green-dark);
   --color-green-medium: var(--green-medium);
   --color-green-desaturated: var(--green-desaturated);
+  --color-green-desaturated-light: var(--green-desaturated-light);
   --color-terracota-dark: var(--terracota-dark);
   --color-terracota-medium: var(--terracota-medium);
   --color-terracota-light: var(--terracota-light);

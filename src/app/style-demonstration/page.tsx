@@ -18,7 +18,8 @@ export default function Page() {
       </p>
       <p>
         The .prose class is used on this page, but it is not mandatory. We will
-        probably use it on the seller profile or other pages that will hold more text
+        probably use it on the seller profile or other pages that will hold more
+        text
       </p>
       <h1>This is an h1 on Playfair Display</h1>
       <h2>This is an h2 on Playfair Display</h2>
@@ -40,7 +41,10 @@ export default function Page() {
         <div className="h-8 bg-green-desaturated text-white">
           bg-green-desaturated
         </div>
-        <div className="h-8 "></div>
+        <div className="h-8 bg-green-desaturated-light text-black">
+          bg-green-desaturated-light
+        </div>
+
         <div className="h-8 bg-terracota-dark text-white">
           bg-terracota-dark
         </div>
@@ -54,7 +58,9 @@ export default function Page() {
         <div className="h-8 text-green-dark">text-green-dark</div>
         <div className="h-8 text-green-medium">text-green-medium</div>
         <div className="h-8 text-green-desaturated">text-green-desaturated</div>
-        <div className="h-8 "></div>
+        <div className="h-8 text-green-desaturated-light">
+          text-green-desaturated-light
+        </div>
         <div className="h-8 text-terracota-dark">text-terracota-dark</div>
         <div className="h-8 text-terracota-medium">text-terracota-medium</div>
         <div className="h-8 text-terracota-light bg-stone-700">
