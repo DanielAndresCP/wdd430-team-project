@@ -49,7 +49,7 @@ export default function NavBar() {
 
       <div
         className={clsx(
-          "sm:flex flex flex-col sm:flex-row gap-3 items-center",
+          "sm:flex flex flex-col sm:flex-row gap-3 sm:gap-6 items-center",
           { hidden: !open }
         )}
       >
