@@ -1,58 +1,8 @@
 import Button from "@/components/button";
-import ProductCard from "@/components/productCard";
+import ProductGrid from "@/components/productGrid";
 import CreatorCard from "@/components/creatorCard";
 
 import johnWoodImage from "&/creators/john-wood.png";
-import spoonImage from "&/products/spoon.png";
-
-const products = [
-  {
-    description: "Some description of a super cool product",
-    name: "Some Product",
-    price: 100,
-    imageSrc: spoonImage.src,
-    width: spoonImage.width,
-    height: spoonImage.height,
-    href: "#",
-  },
-  {
-    description: "Some description of a super cool product",
-    name: "Some Product 2",
-    price: 100,
-    imageSrc: spoonImage.src,
-    width: spoonImage.width,
-    height: spoonImage.height,
-    href: "#",
-  },
-  {
-    description: "Some description of a super cool product",
-    name: "Some Product 3 with long name",
-    price: 100,
-    imageSrc: spoonImage.src,
-    width: spoonImage.width,
-    height: spoonImage.height,
-    href: "#",
-  },
-  {
-    description:
-      "Some description of a super cool product with ultra long description to test how does the overflow work",
-    name: "Some Product 4",
-    price: 100,
-    imageSrc: spoonImage.src,
-    width: spoonImage.width,
-    height: spoonImage.height,
-    href: "#",
-  },
-  {
-    description: "Some description of a super cool product",
-    name: "Some Product 5",
-    price: 100,
-    imageSrc: spoonImage.src,
-    width: spoonImage.width,
-    height: spoonImage.height,
-    href: "#",
-  },
-];
 
 const creators = [
   {
@@ -123,11 +73,7 @@ export default function Home() {
         <h2 className="text-3xl font-title font-semibold mb-4">
           Our top Products
         </h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6 justify-items-center">
-          {products.map((x) => (
-            <ProductCard key={x.name} {...x} className="max-w-xs" />
-          ))}
-        </div>
+        <ProductGrid query="temp" />
       </section>
       <section className="p-6 mt-4">
         <h2 className="text-3xl font-title font-semibold mb-4">
