@@ -1,4 +1,4 @@
-import Button from "@/components/button";
+import Link from "next/link";
 import ProductGrid from "@/components/productGrid";
 import CreatorCard from "@/components/creatorCard";
 
@@ -60,7 +60,12 @@ export default function Home() {
               suscipit optio. Ratione quo natus qui? Voluptate similique
               necessitatibus incidunt enim voluptates?
             </p>
-            <Button text="See all products" type="terracota" />
+            <Link
+              href="/search?min-price=0"
+              className="py-1 px-4 rounded-full bg-terracota-dark text-black no-underline"
+            >
+              Search all products
+            </Link>
           </div>
         </div>
         <div className="grow">
@@ -80,6 +85,7 @@ export default function Home() {
           Featured Artisans and Crafters
         </h2>
         <div className="grid grid-cols-1 xl:grid-cols-2 gap-6 justify-items-center">
+          {/* TODO: replace for CreatorGrid */}
           {creators.map((x) => (
             <CreatorCard
               key={x.name}
