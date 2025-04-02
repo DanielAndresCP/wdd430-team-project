@@ -13,7 +13,7 @@ export default function Pagination({
   className,
 }: {
   totalPages: number;
-  className: string;
+  className?: string;
 }) {
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -23,6 +23,8 @@ export default function Pagination({
 
   function createPageURL(pageNumber: number | string) {
     const params = new URLSearchParams(searchParams);
+    // TODO: we will have to add a parameter to indicate the name of
+    // the search param that indicates the page, because in the search page we have more than one pagination element
     params.set("page", pageNumber.toString());
     return `${pathname}?${params.toString()}`;
   }
