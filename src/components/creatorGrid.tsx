@@ -2,6 +2,7 @@ import CreatorCard from "./creatorCard";
 import SmallCreatorCard from "./smallCreatorCard";
 
 import johnWoodImage from "&/creators/john-wood.png";
+import clsx from "clsx";
 
 export default function CreatorGrid({
   query,
@@ -22,46 +23,52 @@ export default function CreatorGrid({
       specialty: "Woodworking",
       description:
         "I like making some cool wooden spoons, this is some lorem ipsum dolor sit amet, some more lorem ipsum dolor sit amet, and even more lorem ipsum dolor sit amet",
-      href: "#",
+      href: "#1",
     },
     {
       imageSrc: johnWoodImage.src,
       height: johnWoodImage.height,
       width: johnWoodImage.width,
-      name: "John Wood 2",
+      name: "John Wood",
       specialty: "Woodworking",
       description:
         "I like making some cool wooden spoons, this is some lorem ipsum dolor sit amet, some more lorem ipsum dolor sit amet, and even more lorem ipsum dolor sit amet",
-      href: "#",
+      href: "#2",
     },
     {
       imageSrc: johnWoodImage.src,
       height: johnWoodImage.height,
       width: johnWoodImage.width,
-      name: "John Wood 3",
+      name: "John Wood",
       specialty: "Woodworking",
       description:
         "I like making some cool wooden spoons, this is some lorem ipsum dolor sit amet, some more lorem ipsum dolor sit amet, and even more lorem ipsum dolor sit amet",
-      href: "#",
+      href: "#3",
     },
     {
       imageSrc: johnWoodImage.src,
       height: johnWoodImage.height,
       width: johnWoodImage.width,
-      name: "John Wood 4",
+      name: "John Wood",
       specialty: "Woodworking",
       description:
         "I like making some cool wooden spoons, this is some lorem ipsum dolor sit amet, some more lorem ipsum dolor sit amet, and even more lorem ipsum dolor sit amet",
-      href: "#",
+      href: "#4",
     },
   ];
 
   return (
-    <div className="grid gap-6 justify-items-center grid-cols-[repeat(auto-fit,_minmax(220px,_1fr))]">
+    <div
+      className={clsx("grid gap-6 justify-items-center", {
+        "grid-cols-[repeat(auto-fit,_minmax(220px,_1fr))]":
+          cardStyle === "small",
+        "grid-cols-1 sm:grid-cols-[repeat(auto-fit,_minmax(500px,_1fr))]": cardStyle === "normal",
+      })}
+    >
       {cardStyle === "normal" &&
         creators.map((x) => (
           <CreatorCard
-            key={x.name}
+            key={x.href}
             description={x.description}
             height={x.height}
             width={x.width}
@@ -69,13 +76,13 @@ export default function CreatorGrid({
             imageSrc={x.imageSrc}
             name={x.name}
             specialty={x.specialty}
-            className="max-w-xs"
+            className="max-w-lg sm:max-w-4xl"
           />
         ))}
       {cardStyle === "small" &&
         creators.map((x) => (
           <SmallCreatorCard
-            key={x.name}
+            key={x.href}
             height={x.height}
             width={x.width}
             href={x.href}
