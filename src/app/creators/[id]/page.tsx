@@ -34,6 +34,7 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
     shortBio:
       "I like making some cool wooden spoons, this is some lorem ipsum dolor sit amet, some more lorem ipsum dolor sit amet, and even more lorem ipsum dolor sit amet",
     joinDate: new Date().toISOString().split("T")[0],
+    contact: "sales@example.com",
     fullBio: `I still remember the first time I carved a wooden spoon. It was a rainy afternoon, and I was sitting in my grandfather’s old workshop, watching him work on a chair. I found a small scrap of wood, picked up a carving knife, and started whittling. The result was rough, uneven, and barely functional—but I was hooked.  
 
 Growing up, I was always drawn to working with my hands. Whether it was fixing things around the house or sketching out ideas for small projects, I loved the process of creating something from nothing. But it wasn’t until years later, after working an unfulfilling office job, that I decided to turn my passion into my life’s work.  
@@ -81,6 +82,8 @@ Whether you’re here to browse my work or simply share a love for handmade craf
               stars={reviewsTotal.avgRating}
               amountOfReviews={reviewsTotal.amountOfReviews}
             />
+            <br />
+            <b>Contact for sales:</b> {creator.contact}
           </div>
         </aside>
         <article className="prose max-w-none">
