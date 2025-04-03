@@ -20,6 +20,14 @@ export default function SearchBar({ className }: { className?: string }) {
       const params = new URLSearchParams(searchParams);
       params.set("query", processedQuery);
 
+      if (params.get("creators-page")) {
+        params.set("creators-page", "1");
+      }
+
+      if (params.get("products-page")) {
+        params.set("products-page", "1");
+      }
+
       replace(`/search?${params.toString()}`);
     }
   }
