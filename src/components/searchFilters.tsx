@@ -3,7 +3,7 @@
 import clsx from "clsx";
 
 import { usePathname, useSearchParams, useRouter } from "next/navigation";
-import { useState } from "react";
+import { FormEvent, useState } from "react";
 
 export default function SearchFilters({
   categories: allCategories,
@@ -86,7 +86,8 @@ export default function SearchFilters({
     });
   }
 
-  function handleFilter() {
+  function handleSubmit(e: FormEvent) {
+    e.preventDefault();
     const params = new URLSearchParams(searchParams);
 
     // Reset the page numbers
@@ -120,72 +121,74 @@ export default function SearchFilters({
     <div
       className={clsx("p-6 rounded-xl bg-green-desaturated-light", className)}
     >
-      <h2 className="text-xl">Filters</h2>
-      <p className="mt-6">
-        <b>Categories</b>
-      </p>
-      <div>
-        {allCategories.map((x, i) => (
-          <label key={i} className="block">
-            <input
-              type="checkbox"
-              name={x.id}
-              id={x.id}
-              className="mr-2"
-              defaultChecked={searchParamsFilters.categories.some(
-                (px) => px === x.id
-              )}
-              onChange={(x) => {
-                handleCategories(x.target.id, x.target.checked);
-              }}
-            />
-            {x.displayName}
-          </label>
-        ))}
-      </div>
+      <form onSubmit={handleSubmit}>
+        <h2 className="text-xl">Filters</h2>
+        <p className="mt-6">
+          <b>Categories</b>
+        </p>
+        <div>
+          {allCategories.map((x, i) => (
+            <label key={i} className="block">
+              <input
+                type="checkbox"
+                name={x.id}
+                id={x.id}
+                className="mr-2"
+                defaultChecked={searchParamsFilters.categories.some(
+                  (px) => px === x.id
+                )}
+                onChange={(x) => {
+                  handleCategories(x.target.id, x.target.checked);
+                }}
+              />
+              {x.displayName}
+            </label>
+          ))}
+        </div>
 
-      <p className="mt-6">
-        <b>Price</b>
-      </p>
-      <div className="flex flex-row flex-nowrap gap-1">
-        <label htmlFor="min-price" className="sr-only">
-          Minimum price
-        </label>
-        <input
-          type="number"
-          name="min-price"
-          id="min-price"
-          placeholder="min"
-          className="px-3 py-1 max-w-20 rounded-full bg-terracota-lighter outline-0"
-          min={0}
-          value={minPrice ?? ""}
-          onChange={(x) => handleMinValue(Number(x.target.value))}
-        />
-        <span>
-          <b>—</b>
-        </span>
-        <label htmlFor="max-price" className="sr-only">
-          Maximun price
-        </label>
-        <input
-          type="number"
-          name="max-price"
-          id="max-price"
-          placeholder="max"
-          className="px-3 py-1 max-w-20 rounded-full bg-terracota-lighter outline-0"
-          min={0}
-          value={maxPrice ?? ""}
-          onChange={(x) => handleMaxValue(Number(x.target.value))}
-        />
-      </div>
-      <div className="mt-6">
-        <button
-          className="py-1 px-4 rounded-full bg-green-dark text-white mr-3"
-          onClick={handleFilter}
-        >
-          Filter
-        </button>
-      </div>
+        <p className="mt-6">
+          <b>Price</b>
+        </p>
+        <div className="flex flex-row flex-nowrap gap-1">
+          <label htmlFor="min-price" className="sr-only">
+            Minimum price
+          </label>
+          <input
+            type="number"
+            name="min-price"
+            id="min-price"
+            placeholder="min"
+            className="px-3 py-1 max-w-20 rounded-full bg-terracota-lighter outline-0"
+            min={0}
+            value={minPrice ?? ""}
+            onChange={(x) => handleMinValue(Number(x.target.value))}
+          />
+          <span>
+            <b>—</b>
+          </span>
+          <label htmlFor="max-price" className="sr-only">
+            Maximun price
+          </label>
+          <input
+            type="number"
+            name="max-price"
+            id="max-price"
+            placeholder="max"
+            className="px-3 py-1 max-w-20 rounded-full bg-terracota-lighter outline-0"
+            min={0}
+            value={maxPrice ?? ""}
+            onChange={(x) => handleMaxValue(Number(x.target.value))}
+          />
+        </div>
+        <div className="mt-6">
+          <button
+            className="py-1 px-4 rounded-full bg-green-dark text-white mr-3"
+            type="submit"
+          >
+            Filter
+          </button>
+        </div>
+      </form>
     </div>
   );
 }
