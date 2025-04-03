@@ -19,7 +19,6 @@ export default async function Page(props: {
     categories?: string;
   }>;
 }) {
-  
   const searchParams = await props.searchParams;
   const query = searchParams?.query || "";
   const minPrice = searchParams?.["min-price"] || "";
@@ -69,12 +68,20 @@ export default async function Page(props: {
           <div>
             <h2 className="font-title text-3xl mb-3">Artisans and Crafters</h2>
             <CreatorGrid query="temp" cardStyle="small" />
-            <Pagination totalPages={3} className="mt-6" />
+            <Pagination
+              totalPages={3}
+              className="mt-6"
+              pageParam="creators-page"
+            />
           </div>
           <div className="mt-6">
             <h2 className="font-title text-3xl mb-3">Products</h2>
             <ProductGrid query="temp" />
-            <Pagination totalPages={3} className="mt-6" />
+            <Pagination
+              totalPages={3}
+              className="mt-6"
+              pageParam="products-page"
+            />
           </div>
         </div>
       </section>
