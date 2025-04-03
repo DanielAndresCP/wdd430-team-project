@@ -12,17 +12,19 @@ export const metadata: Metadata = {
 export default async function Page(props: {
   searchParams?: Promise<{
     query?: string;
-    page?: string;
-    minPrice?: string;
-    maxPrice?: string;
-    categoriesParam?: string;
+    // I think we don't need this one -Daniel
+    // page?: string;
+    "min-price"?: string;
+    "max-price"?: string;
+    categories?: string;
   }>;
 }) {
+  
   const searchParams = await props.searchParams;
   const query = searchParams?.query || "";
-  const minPrice = searchParams?.minPrice || "";
-  const maxPrice = searchParams?.maxPrice || "";
-  const categoriesParam = searchParams?.categoriesParam || "";
+  const minPrice = searchParams?.["min-price"] || "";
+  const maxPrice = searchParams?.["max-price"] || "";
+  const categoriesParam = searchParams?.categories || "";
 
   // TODO: this must be fetched
   const categories = [
