@@ -1,51 +1,6 @@
 import Link from "next/link";
 import ProductGrid from "@/components/productGrid";
-import CreatorCard from "@/components/creatorCard";
-
-import johnWoodImage from "&/creators/john-wood.png";
-
-const creators = [
-  {
-    imageSrc: johnWoodImage.src,
-    height: johnWoodImage.height,
-    width: johnWoodImage.width,
-    name: "John Wood",
-    specialty: "Woodworking",
-    description:
-      "I like making some cool wooden spoons, this is some lorem ipsum dolor sit amet, some more lorem ipsum dolor sit amet, and even more lorem ipsum dolor sit amet",
-    href: "#",
-  },
-  {
-    imageSrc: johnWoodImage.src,
-    height: johnWoodImage.height,
-    width: johnWoodImage.width,
-    name: "John Wood 2",
-    specialty: "Woodworking",
-    description:
-      "I like making some cool wooden spoons, this is some lorem ipsum dolor sit amet, some more lorem ipsum dolor sit amet, and even more lorem ipsum dolor sit amet",
-    href: "#",
-  },
-  {
-    imageSrc: johnWoodImage.src,
-    height: johnWoodImage.height,
-    width: johnWoodImage.width,
-    name: "John Wood 3",
-    specialty: "Woodworking",
-    description:
-      "I like making some cool wooden spoons, this is some lorem ipsum dolor sit amet, some more lorem ipsum dolor sit amet, and even more lorem ipsum dolor sit amet",
-    href: "#",
-  },
-  {
-    imageSrc: johnWoodImage.src,
-    height: johnWoodImage.height,
-    width: johnWoodImage.width,
-    name: "John Wood 4",
-    specialty: "Woodworking",
-    description:
-      "I like making some cool wooden spoons, this is some lorem ipsum dolor sit amet, some more lorem ipsum dolor sit amet, and even more lorem ipsum dolor sit amet",
-    href: "#",
-  },
-];
+import CreatorGrid from "@/components/creatorGrid";
 
 export default function Home() {
   return (
@@ -84,16 +39,7 @@ export default function Home() {
         <h2 className="text-3xl font-title font-semibold mb-4">
           Featured Artisans and Crafters
         </h2>
-        <div className="grid grid-cols-1 xl:grid-cols-2 gap-6 justify-items-center">
-          {/* TODO: replace for CreatorGrid */}
-          {creators.map((x) => (
-            <CreatorCard
-              key={x.name}
-              {...x}
-              className="max-w-lg sm:max-w-4xl"
-            />
-          ))}
-        </div>
+        <CreatorGrid query="temp" />
       </section>
     </main>
   );
