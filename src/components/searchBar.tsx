@@ -43,6 +43,7 @@ export default function SearchBar({ className }: { className?: string }) {
             }}
           />
           <button type="submit" className="contents cursor-pointer">
+            <span className="sr-only">Search Icon</span>
             <MagnifyingGlassIcon />
           </button>
         </form>
