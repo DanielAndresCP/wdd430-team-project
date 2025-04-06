@@ -11,19 +11,21 @@ import { usePathname, useSearchParams } from "next/navigation";
 export default function Pagination({
   totalPages,
   className,
+  pageParam = "page",
 }: {
   totalPages: number;
-  className: string;
+  className?: string;
+  pageParam?: string;
 }) {
   const pathname = usePathname();
   const searchParams = useSearchParams();
-  const currentPage = Number(searchParams.get("page")) || 1;
+  const currentPage = Number(searchParams.get(pageParam)) || 1;
 
   const allPages = generatePagination(currentPage, totalPages);
 
   function createPageURL(pageNumber: number | string) {
     const params = new URLSearchParams(searchParams);
-    params.set("page", pageNumber.toString());
+    params.set(pageParam, pageNumber.toString());
     return `${pathname}?${params.toString()}`;
   }
 
@@ -118,9 +120,15 @@ function PaginationArrow({
 
   const icon =
     direction === "left" ? (
-      <ArrowLeftIcon className="w-4" />
+      <>
+        <span className="sr-only">Previous Page</span>
+        <ArrowLeftIcon className="w-4" />
+      </>
     ) : (
-      <ArrowRightIcon className="w-4" />
+      <>
+        <span className="sr-only">Next Page</span>
+        <ArrowRightIcon className="w-4" />
+      </>
     );
 
   return isDisabled ? (
