@@ -32,12 +32,15 @@ export async function authenticate(
 
 
 
+
 const prisma = new PrismaClient();
 
+// Validación incluyendo el rol
 const userSchema = z.object({
   name: z.string().min(2, 'Name is required'),
   email: z.string().email('Invalid email'),
   password: z.string().min(6, 'Password must be at least 6 characters'),
+  role: z.enum(['USER', 'SELLER']),
 });
 
 export async function createUser(_: any, formData: FormData) {
@@ -46,11 +49,12 @@ export async function createUser(_: any, formData: FormData) {
       name: formData.get('name'),
       email: formData.get('email'),
       password: formData.get('password'),
+      role: formData.get('role'),
     };
 
     const parsed = userSchema.safeParse(data);
     if (!parsed.success) {
-      return parsed.error.errors[0].message;
+      return { success: false, message: parsed.error.errors[0].message };
     }
 
     const existing = await prisma.user.findUnique({
@@ -58,7 +62,7 @@ export async function createUser(_: any, formData: FormData) {
     });
 
     if (existing) {
-      return 'Email already registered';
+      return { success: false, message: 'Email already registered' };
     }
 
     const hashedPassword = await bcrypt.hash(parsed.data.password, 10);
@@ -68,12 +72,13 @@ export async function createUser(_: any, formData: FormData) {
         name: parsed.data.name,
         email: parsed.data.email,
         password: hashedPassword,
+        role: parsed.data.role,
       },
     });
 
-    return undefined; // éxito
+    return { success: true };
   } catch (error) {
     console.error('❌ Error creating user:', error);
-    return 'Something went wrong';
+    return { success: false, message: 'Something went wrong' };
   }
 }

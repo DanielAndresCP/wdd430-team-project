@@ -66,16 +66,41 @@ export default function LoginForm() {
         </div>
       </div>
 
-      {/* Este input es CLAVE para que signIn sepa a dónde redirigir */}
       <input type="hidden" name="redirectTo" value={callbackUrl} />
 
       <button
-        type="submit"
-        className="w-full rounded-md bg-terracota-dark text-white py-2 font-semibold hover:bg-terracota-medium transition-colors"
-        aria-disabled={isPending}
-      >
-        Log In <ArrowRightIcon className="ml-2 inline h-5 w-5 text-white" />
-      </button>
+          type="submit"
+          className="w-full rounded-md bg-terracota-dark text-white py-2 font-semibold hover:bg-terracota-medium transition-colors flex justify-center items-center"
+          aria-disabled={isPending}
+        >
+          {isPending ? (
+            <svg
+              className="animate-spin h-5 w-5 text-white"
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+            >
+              <circle
+                className="opacity-25"
+                cx="12"
+                cy="12"
+                r="10"
+                stroke="currentColor"
+                strokeWidth="4"
+              ></circle>
+              <path
+                className="opacity-75"
+                fill="none"
+                d="M4 12a8 8 0 0116 0"
+                stroke="currentColor"
+                strokeWidth="4"
+              ></path>
+            </svg>
+          ) : (
+            'Log In'
+          )}
+        </button>
 
       <p className="text-center text-sm text-gray-600">
         Don't have an account?{' '}
@@ -86,3 +111,6 @@ export default function LoginForm() {
     </form>
   );
 }
+
+
+
