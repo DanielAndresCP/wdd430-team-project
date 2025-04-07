@@ -56,3 +56,14 @@ body {
 .prose h6 {
   font-family: var(--font-playfair-display);
 }
+
+
+
+[data-sonner-toast][data-type='success'] {
+  background-color: theme('colors.terracota-dark');
+  color: white;
+}
+[data-sonner-toast][data-type='error'] {
+  background-color: theme('colors.red.600');
+  color: white;
+}
