@@ -6,7 +6,7 @@ export default function StarRatingDisplay({
   amountOfReviews,
 }: {
   stars: number;
-  amountOfReviews: number;
+  amountOfReviews?: number;
 }) {
   // Creates an array of 5 elements, with true for each star and false for a non-earned star
   const starArray = [
@@ -17,17 +17,17 @@ export default function StarRatingDisplay({
   const starClassname = "inline-block w-4 text-green-dark";
 
   return (
-        <>
-    <div className="inline-grid grid-cols-5 gap-0.5">
-      {starArray.map((x, i) =>
-        x ? (
-          <StarIconSolid key={i} className={starClassname} />
-        ) : (
-          <StarIconOutline key={i} className={starClassname} />
-        )
-      )}
-    </div>
-    <span>({amountOfReviews})</span>
+    <>
+      <div className="inline-grid grid-cols-5 gap-0.5">
+        {starArray.map((x, i) =>
+          x ? (
+            <StarIconSolid key={i} className={starClassname} />
+          ) : (
+            <StarIconOutline key={i} className={starClassname} />
+          )
+        )}
+      </div>
+      {amountOfReviews && <span>({amountOfReviews})</span>}
     </>
   );
 }
