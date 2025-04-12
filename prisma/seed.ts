@@ -49,6 +49,7 @@ async function main() {
       email: "test@example.com",
       name: "Test User",
       password: hashedPassword,
+      profilePictureUrl: "/placeholder.png"
     },
   });
 
