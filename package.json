@@ -9,6 +9,9 @@
     "start": "next start",
     "lint": "next lint"
   },
+  "prisma": {
+    "seed": "node --loader ts-node/esm prisma/seed.ts"
+  },
   "dependencies": {
     "@heroicons/react": "^2.2.0",
     "@prisma/client": "^6.5.0",

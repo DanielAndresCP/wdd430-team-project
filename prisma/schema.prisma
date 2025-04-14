@@ -9,23 +9,23 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
-  directUrl  = env("DIRECT_URL") // Optional: Use this if you want to connect to a database directly without using the Prisma Data Platform
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL") // Optional: Use this if you want to connect to a database directly without using the Prisma Data Platform
 }
 
 model User {
-  id        String   @id @default(cuid())
-  name      String?
-  email     String   @unique
-  password  String
-  role      Role     @default(USER)
-  profilePictureUrl String?         
-  settings  Json?                  
-  products  Product[]
-  reviews   Review[]
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id                String    @id @default(cuid())
+  name              String
+  email             String    @unique
+  password          String
+  role              Role      @default(USER)
+  profilePictureUrl String
+  settings          Json?
+  products          Product[]
+  reviews           Review[]
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
 }
 
 model Product {
@@ -34,7 +34,8 @@ model Product {
   description String
   price       Float
   imageUrl    String
-  category    String
+  categoryId  String
+  category    Category @relation(fields: [categoryId], references: [id])
   seller      User     @relation(fields: [sellerId], references: [id])
   sellerId    String
   reviews     Review[]
@@ -53,9 +54,14 @@ model Review {
   createdAt DateTime @default(now())
 }
 
+model Category {
+  id          String    @id @default(cuid())
+  displayName String
+  products    Product[]
+}
+
 enum Role {
   USER
   SELLER
   ADMIN
 }
-
