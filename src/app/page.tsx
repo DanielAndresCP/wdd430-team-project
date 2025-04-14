@@ -33,13 +33,13 @@ export default function Home() {
         <h2 className="text-3xl font-title font-semibold mb-4">
           Our top Products
         </h2>
-        <ProductGrid query="temp" />
+        <ProductGrid query='' />
       </section>
       <section className="p-6 mt-4">
         <h2 className="text-3xl font-title font-semibold mb-4">
           Featured Artisans and Crafters
         </h2>
-        <CreatorGrid query="temp" />
+        <CreatorGrid query='' />
       </section>
     </main>
   );
