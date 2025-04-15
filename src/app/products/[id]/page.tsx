@@ -9,7 +9,8 @@ export default async function ProductDetailPage({
 }: {
   readonly params: { readonly id: string };
 }) {
-  const product = await getProductById(params.id);
+  const { id } = await params;
+  const product = await getProductById(id);
   const session = await auth();
 
   if (!product) {

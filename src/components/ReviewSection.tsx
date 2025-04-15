@@ -6,10 +6,10 @@ import { fetchReviewsByProductId } from '@/app/lib/client/fetch-reviews';
 export default function ReviewSection({
   productId,
   user,
-}: {
+}: Readonly<{
   productId: string;
   user?: { name?: string; email?: string };
-}) {
+}>) {
   const [reviews, setReviews] = useState<any[]>([]);
   const [comment, setComment] = useState('');
   const [rating, setRating] = useState('');
