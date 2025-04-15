@@ -1,3 +1,4 @@
+"use server";
 import { PrismaClient } from "@prisma/client";
 import { fuseFilters } from "./filterParsing";
 
@@ -30,4 +31,47 @@ export async function fetchProductPages(query: string) {
     totalAmount: result,
     amountPerPage: PRODUCTS_PER_PAGE,
   };
+}
+
+export async function getAllProducts() {
+  return await prisma.product.findMany({
+    include: {
+      seller: {
+        select: {
+          name: true,
+        },
+      },
+    },
+    orderBy: {
+      createdAt: "desc",
+    },
+  });
+}
+
+export async function getProductById(id: string) {
+  try {
+    const product = await prisma.product.findUnique({
+      where: { id },
+      include: {
+        category: true,
+        seller: {
+          select: {
+            name: true,
+          },
+        },
+        reviews: {
+          include: {
+            user: {
+              select: { name: true },
+            },
+          },
+        },
+      },
+    });
+
+    return product;
+  } catch (error) {
+    console.error("❌ Error fetching product:", error);
+    return null;
+  }
 }
