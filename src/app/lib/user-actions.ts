@@ -19,7 +19,7 @@ export async function fetchSellers(query: string, page: number) {
   return result;
 }
 
-export async function fetchSellersAmount(query: string) {
+export async function fetchSellersPages(query: string) {
   const options = {
     where: fuseFilters(query, { role: "SELLER" }),
   };
@@ -29,5 +29,6 @@ export async function fetchSellersAmount(query: string) {
   return {
     totalPages: Math.ceil(result / SELLERS_PER_PAGE),
     totalAmount: result,
-  };;
+    amountPerPage: SELLERS_PER_PAGE,
+  };
 }

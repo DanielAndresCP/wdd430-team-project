@@ -23,11 +23,11 @@ export async function fetchProductPages(query: string) {
     where: fuseFilters(query),
   };
 
-  
   const result = await prisma.product.count(options);
 
   return {
     totalPages: Math.ceil(result / PRODUCTS_PER_PAGE),
     totalAmount: result,
+    amountPerPage: PRODUCTS_PER_PAGE,
   };
 }
