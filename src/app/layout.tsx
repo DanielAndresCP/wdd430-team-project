@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Playfair_Display, Literata } from "next/font/google";
 import "./globals.css";
 import { Toaster } from 'sonner';
+import { SessionProvider } from 'next-auth/react'; // 👈 importá esto
+
 
 import Header from "@/components/header";
 import Footer from "@/components/footer";
@@ -34,11 +36,13 @@ export default function RootLayout({
       <body
         className={`${playfairDisplay.variable} ${literata.variable} antialiased bg-terracota-lighter`}
       >
+        {/* <SessionProvider> */}
         <Toaster position="top-center" richColors closeButton />
 
         <Header />
         {children}
         <Footer />
+        {/* </SessionProvider> */}
       </body>
     </html>
   );
