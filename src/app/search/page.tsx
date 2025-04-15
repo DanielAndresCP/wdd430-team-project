@@ -119,7 +119,7 @@ export default async function Page(props: {
         <div>
           <div>
             <h2 className="font-title text-3xl mb-3">Artisans and Crafters</h2>
-            {productAmountResult.value.totalPages === 0 ? (
+            {sellerAmountResult.value.totalPages === 0 ? (
               <p>No search results</p>
             ) : (
               <>
