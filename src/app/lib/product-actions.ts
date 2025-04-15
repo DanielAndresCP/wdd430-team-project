@@ -1,13 +1,11 @@
-'use server';
+"use server";
 import { PrismaClient } from "@prisma/client";
 import { fuseFilters } from "./filterParsing";
-import { auth } from '../../../auth'
-import { z } from "zod";
 
 const prisma = new PrismaClient();
+const PRODUCTS_PER_PAGE = 10;
 
 export async function fetchProducts(query: string, page: number) {
-  const PRODUCTS_PER_PAGE = 10;
   const offset = (page - 1) * PRODUCTS_PER_PAGE;
 
   const options: { skip: number; take: number; where: Object } = {
@@ -21,7 +19,19 @@ export async function fetchProducts(query: string, page: number) {
   return result;
 }
 
+export async function fetchProductPages(query: string) {
+  const options = {
+    where: fuseFilters(query),
+  };
 
+  const result = await prisma.product.count(options);
+
+  return {
+    totalPages: Math.ceil(result / PRODUCTS_PER_PAGE),
+    totalAmount: result,
+    amountPerPage: PRODUCTS_PER_PAGE,
+  };
+}
 
 export async function getAllProducts() {
   return await prisma.product.findMany({
@@ -33,7 +43,7 @@ export async function getAllProducts() {
       },
     },
     orderBy: {
-      createdAt: 'desc',
+      createdAt: "desc",
     },
   });
 }
@@ -61,8 +71,7 @@ export async function getProductById(id: string) {
 
     return product;
   } catch (error) {
-    console.error('❌ Error fetching product:', error);
+    console.error("❌ Error fetching product:", error);
     return null;
   }
 }
-
