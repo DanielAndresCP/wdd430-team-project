@@ -73,6 +73,8 @@ export async function createUser(_: any, formData: FormData) {
         email: parsed.data.email,
         password: hashedPassword,
         role: parsed.data.role,
+        profilePictureUrl: 'empty',
+
       },
     });
 
