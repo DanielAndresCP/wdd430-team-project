@@ -182,7 +182,7 @@ export default function SearchFilters({
         </div>
         <div className="mt-6">
           <button
-            className="py-1 px-4 rounded-full bg-green-dark text-white mr-3"
+            className="py-1 px-4 rounded-full bg-green-dark text-white mr-3 cursor-pointer"
             type="submit"
           >
             Filter
