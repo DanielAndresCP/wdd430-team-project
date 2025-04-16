@@ -1,13 +1,13 @@
-import { getProductById } from '@/app/lib/product-actions';
-import { auth } from '../../../../auth';
-import { notFound } from 'next/navigation';
-import Image from 'next/image';
-import ReviewSection from '@/components/ReviewSection';
+import { getProductById } from "@/app/lib/product-actions";
+import { auth } from "../../../../auth";
+import { notFound } from "next/navigation";
+import Image from "next/image";
+import ReviewSection from "@/components/ReviewSection";
 
 export default async function ProductDetailPage({
   params,
 }: {
-  readonly params: { readonly id: string };
+  params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
   const product = await getProductById(id);
@@ -16,6 +16,10 @@ export default async function ProductDetailPage({
   if (!product) {
     return notFound();
   }
+
+  const user = session?.user
+    ? { name: String(session.user.name), email: String(session.user.email) }
+    : undefined;
 
   return (
     <main className="max-w-5xl mx-auto p-6 font-[var(--font-literata)]">
@@ -46,7 +50,7 @@ export default async function ProductDetailPage({
         </div>
       </div>
 
-      <ReviewSection productId={product.id} user={session?.user} />
+      <ReviewSection productId={product.id} user={user} />
     </main>
   );
 }

@@ -1,7 +1,7 @@
-'use client';
+"use client";
 
-import { useState, useEffect } from 'react';
-import { fetchReviewsByProductId } from '@/app/lib/client/fetch-reviews';
+import { useState, useEffect } from "react";
+import { fetchReviewsByProductId } from "@/app/lib/client/fetch-reviews";
 
 export default function ReviewSection({
   productId,
@@ -10,9 +10,10 @@ export default function ReviewSection({
   productId: string;
   user?: { name?: string; email?: string };
 }>) {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [reviews, setReviews] = useState<any[]>([]);
-  const [comment, setComment] = useState('');
-  const [rating, setRating] = useState('');
+  const [comment, setComment] = useState("");
+  const [rating, setRating] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [loading, setLoading] = useState(true);
 
@@ -25,6 +26,7 @@ export default function ReviewSection({
 
   useEffect(() => {
     loadReviews();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [productId]);
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -32,21 +34,21 @@ export default function ReviewSection({
     setIsSubmitting(true);
 
     try {
-      const res = await fetch('/api/reviews', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+      const res = await fetch("/api/reviews", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ comment, rating: Number(rating), productId }),
       });
 
       if (res.ok) {
-        setComment('');
-        setRating('');
+        setComment("");
+        setRating("");
         await loadReviews();
       } else {
-        console.error('❌ Failed to submit review');
+        console.error("❌ Failed to submit review");
       }
     } catch (error) {
-      console.error('❌ Error:', error);
+      console.error("❌ Error:", error);
     } finally {
       setIsSubmitting(false);
     }
@@ -68,8 +70,12 @@ export default function ReviewSection({
         {averageRating && (
           <div className="flex items-center text-yellow-500 font-semibold">
             <span className="text-xl">★</span>
-            <span className="ml-1 text-base text-gray-800">{averageRating}/5</span>
-            <span className="ml-2 text-sm text-gray-500">({reviews.length})</span>
+            <span className="ml-1 text-base text-gray-800">
+              {averageRating}/5
+            </span>
+            <span className="ml-2 text-sm text-gray-500">
+              ({reviews.length})
+            </span>
           </div>
         )}
       </div>
@@ -94,7 +100,9 @@ export default function ReviewSection({
       {/* Review Form */}
       {user ? (
         <section className="mt-12">
-          <h3 className="text-xl font-semibold text-terracota-dark mb-2">Leave a Review</h3>
+          <h3 className="text-xl font-semibold text-terracota-dark mb-2">
+            Leave a Review
+          </h3>
           <form onSubmit={handleSubmit} className="space-y-4">
             <textarea
               name="comment"
@@ -113,7 +121,9 @@ export default function ReviewSection({
             >
               <option value="">Select rating</option>
               {[1, 2, 3, 4, 5].map((r) => (
-                <option key={r} value={r}>{r}</option>
+                <option key={r} value={r}>
+                  {r}
+                </option>
               ))}
             </select>
             <button
@@ -121,13 +131,17 @@ export default function ReviewSection({
               disabled={isSubmitting}
               className="px-4 py-2 bg-terracota-dark text-white rounded-md hover:bg-terracota-medium transition"
             >
-              {isSubmitting ? 'Submitting...' : 'Submit Review'}
+              {isSubmitting ? "Submitting..." : "Submit Review"}
             </button>
           </form>
         </section>
       ) : (
         <p className="mt-6 text-gray-600">
-          You must <a href="/auth/login" className="text-terracota-medium underline">log in</a> to leave a review.
+          You must{" "}
+          <a href="/auth/login" className="text-terracota-medium underline">
+            log in
+          </a>{" "}
+          to leave a review.
         </p>
       )}
     </>

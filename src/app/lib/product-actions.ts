@@ -4,7 +4,7 @@ import { fuseFilters } from "./filterParsing";
 import { z } from "zod";
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
-import { auth } from "../../../auth";
+import { hasPermissions } from "./user-actions";
 
 const prisma = new PrismaClient();
 const PRODUCTS_PER_PAGE = 10;
@@ -12,7 +12,7 @@ const PRODUCTS_PER_PAGE = 10;
 export async function fetchProducts(query: string, page: number) {
   const offset = (page - 1) * PRODUCTS_PER_PAGE;
 
-  const options: { skip: number; take: number; where: Object } = {
+  const options: { skip: number; take: number; where: object } = {
     skip: offset,
     take: PRODUCTS_PER_PAGE,
     where: fuseFilters(query),
@@ -137,10 +137,13 @@ export async function createProduct(formData: {
   categoryId: string;
 }) {
   try {
-    const session = await auth();
-
-    if (!session?.user || session.user.role !== "SELLER") {
+    const permissions = await hasPermissions(["SELLER"]);
+    if (!permissions.canPass) {
       return { success: false, message: "Unauthorized" };
+    }
+
+    if (!permissions.userData) {
+      throw new Error("User data is missing even though it was expected");
     }
 
     const parsed = productSchema.safeParse(formData);
@@ -149,7 +152,7 @@ export async function createProduct(formData: {
     }
 
     const seller = await prisma.user.findUnique({
-      where: { email: session.user.email },
+      where: { email: permissions.userData.email },
     });
 
     if (!seller) {
@@ -181,10 +184,14 @@ const editProduct = z.object({
 
 export async function updateProduct(formData: FormData) {
   try {
-    const session = await auth();
+    const permissions = await hasPermissions(["SELLER"]);
 
-    if (!session?.user?.email || session.user.role !== "SELLER") {
+    if (!permissions.canPass) {
       return { success: false, message: "Unauthorized" };
+    }
+
+    if (!permissions.userData) {
+      throw new Error("User data is missing even though it was expected");
     }
 
     const parsed = editProduct.safeParse({
@@ -205,7 +212,7 @@ export async function updateProduct(formData: FormData) {
       include: { seller: true },
     });
 
-    if (!product || product.seller.email !== session.user.email) {
+    if (!product || product.seller.email !== permissions.userData.email) {
       return { success: false, message: "Product not found or access denied" };
     }
 

@@ -127,7 +127,7 @@ export default async function Page(props: {
       </section>
       <section className="container mx-auto p-6">
         <h2 className="text-3xl font-title font-semibold mb-4">
-          {creator.displayName}'s Products
+          {creator.displayName}&lsquo;s Products
         </h2>
         <Suspense
           fallback={

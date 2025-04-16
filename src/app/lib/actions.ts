@@ -44,7 +44,7 @@ const userSchema = z.object({
   role: z.enum(['USER', 'SELLER']),
 });
 
-export async function createUser(_: any, formData: FormData) {
+export async function createUser(_: unknown, formData: FormData) {
   try {
     const data = {
       name: formData.get('name'),
