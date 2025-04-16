@@ -9,6 +9,8 @@ import { redirect } from "next/navigation";
 import { fetchCategories } from "@/app/lib/category-actions";
 import { formatDate } from "@/utils/formatting";
 import { fetchProductPages } from "@/app/lib/product-actions";
+import { Suspense } from "react";
+import CardGridSkeleton from "@/components/cardGridSkeleton";
 
 function average(arr: number[]): number {
   if (arr.length === 0) return NaN;
@@ -61,8 +63,6 @@ export default async function Page(props: {
     amountOfReviews: creatorResult.reviews.length,
   };
 
-  const productAmount = creatorResult.products.length;
-
   const categories = await fetchCategories({
     where: {
       id: {
@@ -86,7 +86,7 @@ export default async function Page(props: {
     sellerId: id,
   });
 
-  const totalPages = (await fetchProductPages(productsQuery)).totalPages;
+  const productCountData = await fetchProductPages(productsQuery);
 
   return (
     <main>
@@ -105,7 +105,7 @@ export default async function Page(props: {
           </p>
           <p>{creator.shortBio}</p>
           <div>
-            <b>Products:</b> {productAmount}
+            <b>Products:</b> {productCountData.totalAmount}
             <br />
             <b>Join Date:</b> {creator.joinDate}
             <br />
@@ -120,7 +120,6 @@ export default async function Page(props: {
         </aside>
         <article className="prose max-w-none">
           <h2>About Me</h2>
-          {/* TODO: how will we handle text? */}
           {creator.fullBio.split("\n").map((x, i) => (
             <p key={i}>{x}</p>
           ))}
@@ -130,8 +129,19 @@ export default async function Page(props: {
         <h2 className="text-3xl font-title font-semibold mb-4">
           {creator.displayName}'s Products
         </h2>
-        <ProductGrid query={productsQuery} page={Number(page)} />
-        <Pagination totalPages={totalPages} className="mt-5" />
+        <Suspense
+          fallback={
+            <CardGridSkeleton
+              amount={Math.min(
+                productCountData.amountPerPage,
+                productCountData.totalAmount
+              )}
+            />
+          }
+        >
+          <ProductGrid query={productsQuery} page={Number(page)} />
+        </Suspense>
+        <Pagination totalPages={productCountData.totalPages} className="mt-5" />
       </section>
     </main>
   );
