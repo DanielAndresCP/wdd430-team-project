@@ -1,57 +1,60 @@
-"use client";
-
-import { useSearchParams, usePathname, useRouter } from "next/navigation";
 import Pagination from "@/components/pagination";
-import ProductGrid from "@/components/productGrid";
-import { useDebouncedCallback } from "use-debounce";
-import { PlusCircleIcon } from "@heroicons/react/24/outline";
-import Link from "next/link";
+import AdminProductGrid from "@/components/adminProductGrid";
+import ProductSearchBar from "@/components/productSearchBar";
+import { Suspense } from "react";
+import CardGridSkeleton from "@/components/cardGridSkeleton";
 
-export default function Page() {
-  const searchParams = useSearchParams();
-  const pathname = usePathname();
-  const { replace } = useRouter();
+import { fetchProductPages } from "@/app/lib/product-actions";
+import { redirect } from "next/navigation";
+import { hasPermissions } from "@/app/lib/user-actions";
 
-  const handleSearch = useDebouncedCallback((term) => {
-    const params = new URLSearchParams(searchParams);
+export default async function Page(props: {
+  searchParams?: Promise<{
+    query?: string;
+    page?: string;
+  }>;
+}) {
+  const searchParams = await props.searchParams;
+  const query = searchParams?.query || "";
+  const page = searchParams?.page || 1;
 
-    params.set("page", "1");
+  const permissions = await hasPermissions(["SELLER"]);
+  if (!permissions.authenticated) {
+    return redirect("/");
+  }
 
-    if (term) {
-      params.set("query", term);
-    } else {
-      params.delete("query");
-    }
-    replace(`${pathname}?${params.toString()}`);
-  }, 300);
+  if (!permissions.authorized) {
+    return redirect("/settings/account");
+  }
+
+  if (!permissions.userData) {
+    throw new Error("User data is missing even though it was expected");
+  }
+
+  const productsQuery = JSON.stringify({
+    title: {
+      contains: query,
+      mode: "insensitive",
+    },
+    sellerId: permissions.userData.id,
+  });
+
+  const productAmountResult = await fetchProductPages(productsQuery);
 
   return (
     <main>
       <h2 className="font-title text-2xl mb-6">My Products</h2>
-      <label htmlFor="search" className="sr-only">
-        Search in My Products
-      </label>
-      <div className="mb-6 flex flex-row gap-4">
-        <input
-          type="text"
-          placeholder="Search in My Products"
-          id="search"
-          className="block px-3 py-1 w-full rounded-full bg-white shadow-lg outline-none"
-          onChange={(x) => {
-            handleSearch(x.target.value);
-          }}
-        />
-        <Link
-          href="#"
-          className="w-12 py-1 px-2 rounded-full bg-green-dark text-white"
-        >
-          <PlusCircleIcon />
-          <span className="sr-only">Add a product</span>
-        </Link>
-      </div>
+      <ProductSearchBar />
       {/* TODO: we need to redirect to the edit page, not the product page */}
-      <ProductGrid query="temp" />
-      <Pagination totalPages={2} className="mt-6" />
+      <Suspense
+        fallback={<CardGridSkeleton amount={productAmountResult.totalAmount} />}
+      >
+        <AdminProductGrid query={productsQuery} page={Number(page)} />
+      </Suspense>
+      <Pagination
+        totalPages={productAmountResult.totalPages}
+        className="mt-6"
+      />
     </main>
   );
 }
