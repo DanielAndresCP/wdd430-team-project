@@ -3,24 +3,30 @@ import type { NextAuthConfig } from 'next-auth';
 
 export const authConfig = {
   pages: {
-    signIn: '/auth/login', // tu ruta personalizada
+    signIn: '/auth/login',
   },
   callbacks: {
     authorized({ auth, request: { nextUrl } }) {
       const isLoggedIn = !!auth?.user;
-      // const isOnDashboard = nextUrl.pathname.startsWith('/dashboard');
-
-      // if (isOnDashboard) {
-      //   return isLoggedIn;
-      // }
-
-      // Si ya está logueado y va a la home, lo mandamos al dashboard
       if (isLoggedIn && nextUrl.pathname === '/') {
         return Response.redirect(new URL('/', nextUrl));
       }
-
       return true;
     },
+
+    async jwt({ token, user }) {
+      if (user) {
+        token.role = user.role; // guarda el role en el token
+      }
+      return token;
+    },
+
+    async session({ session, token }) {
+      if (session.user) {
+        session.user.role = token.role as string; 
+      }
+      return session;
+    },
   },
-  providers: [], // <- completado dinámicamente desde auth.ts
+  providers: [],
 } satisfies NextAuthConfig;
