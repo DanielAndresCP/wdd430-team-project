@@ -20,7 +20,7 @@ export default function LoginForm() {
     undefined
   );
   useEffect(() => {
-    if (!errorMessage) {
+    if (errorMessage) {
       router.refresh();
       router.push(callbackUrl);
     }
