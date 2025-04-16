@@ -2,9 +2,11 @@
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { LogOut, UserCircle2 } from 'lucide-react';
 
 export default function UserMenu() {
+  const pathname = usePathname(); // se actualiza en cada navegación
   const [user, setUser] = useState<{ name?: string; email?: string } | null>(null);
   const [loading, setLoading] = useState(true);
   const [open, setOpen] = useState(false);
@@ -16,16 +18,19 @@ export default function UserMenu() {
         if (res.ok) {
           const data = await res.json();
           setUser(data.user);
+        } else {
+          setUser(null);
         }
       } catch (err) {
         console.error('Error fetching session', err);
+        setUser(null);
       } finally {
         setLoading(false);
       }
     };
 
     fetchSession();
-  }, []);
+  }, [pathname]); // 🟢 vuelve a llamar cuando se navega a otra página
 
   if (loading) return null;
 

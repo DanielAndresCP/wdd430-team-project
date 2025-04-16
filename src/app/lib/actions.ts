@@ -33,6 +33,7 @@ export async function authenticate(
 
 
 
+
 const prisma = new PrismaClient();
 
 // Validación incluyendo el rol
@@ -73,8 +74,14 @@ export async function createUser(_: any, formData: FormData) {
         email: parsed.data.email,
         password: hashedPassword,
         role: parsed.data.role,
-        profilePictureUrl: 'empty',
-
+        profilePictureUrl: '/profile-default.webp',
+        ...(parsed.data.role === 'SELLER' && {
+          settings: {
+            fullBio: '',
+            shortBio: '',
+            specialties: ['cm9dhlhh00000vfvouiss3maa'],
+          },
+        }),
       },
     });
 
