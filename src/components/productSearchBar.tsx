@@ -39,7 +39,7 @@ export default function ProductSearchBar() {
         }}
       />
       <Link
-        href="#"
+        href="/products/create"
         className="w-12 py-1 px-2 rounded-full bg-green-dark text-white"
       >
         <PlusCircleIcon />
