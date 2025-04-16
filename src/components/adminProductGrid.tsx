@@ -1,9 +1,9 @@
-"use server"
-import ProductCard from "./productCard";
+"use server";
+import AdminProductCard from "./adminProductCard";
 
 import { fetchProducts } from "@/app/lib/product-actions";
 
-export default async function ProductGrid({
+export default async function AdminProductGrid({
   query,
   page = 1,
 }: {
@@ -21,7 +21,8 @@ export default async function ProductGrid({
   return (
     <div className="grid gap-6 justify-items-center grid-cols-[repeat(auto-fit,_minmax(220px,_1fr))]">
       {products.map((x) => (
-        <ProductCard
+        <AdminProductCard
+          productId={x.id}
           key={x.title}
           description={x.description}
           imageSrc={x.imageUrl}

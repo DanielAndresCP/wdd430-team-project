@@ -1,10 +1,13 @@
+"use server";
 import SettingsNavBar from "@/components/settingsNavBar";
+import { hasPermissions } from "../lib/user-actions";
+import { redirect } from "next/navigation";
 
 const settingsNavLinks = [
   {
     text: "Account Settings",
     href: "/settings/account",
-    allowedRoles: ["USER","SELLER", "ADMIN"],
+    allowedRoles: ["USER", "SELLER", "ADMIN"],
   },
   {
     text: "Seller Profile Settings",
@@ -23,13 +26,30 @@ const settingsNavLinks = [
   },
 ];
 
-// TODO, make the shown links depend on the user role
-const currentRole = "ADMIN";
-const filteredNavLinks = settingsNavLinks
-  .filter((x) => x.allowedRoles.includes(currentRole))
-  .map((x) => ({ text: x.text, href: x.href }));
+export default async function Layout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  const permissions = await hasPermissions(["SELLER", "ADMIN", "USER"]);
+  if (!permissions.authenticated) {
+    return redirect("/");
+  }
 
-export default function Layout({ children }: { children: React.ReactNode }) {
+  if (!permissions.authorized) {
+    return redirect("/");
+  }
+
+  if (!permissions.userData) {
+    throw new Error("User data is missing even though it was expected");
+  }
+
+  const currentRole = permissions.userData.role;
+
+  const filteredNavLinks = settingsNavLinks
+    .filter((x) => x.allowedRoles.includes(currentRole))
+    .map((x) => ({ text: x.text, href: x.href }));
+
   return (
     <div className="container mx-auto p-6">
       <h1 className="text-3xl font-title mb-4">Settings</h1>

@@ -2,8 +2,9 @@
 import { PrismaClient } from "@prisma/client";
 import { fuseFilters } from "./filterParsing";
 import { z } from "zod";
-import { auth } from '../../../auth';
-
+import { redirect } from "next/navigation";
+import { revalidatePath } from "next/cache";
+import { auth } from "../../../auth";
 
 const prisma = new PrismaClient();
 const PRODUCTS_PER_PAGE = 10;
@@ -60,7 +61,7 @@ export async function getProductById(id: string) {
         seller: {
           select: {
             name: true,
-            email: true, 
+            email: true,
           },
         },
         reviews: {
@@ -80,8 +81,45 @@ export async function getProductById(id: string) {
   }
 }
 
+const DeleteProductSchema = z.object({
+  productId: z.string({ message: "Product ID missing when expected" }),
+});
 
+export type DeleteProductState = {
+  errors?: {
+    productId?: string[];
+  };
+  message?: string | null;
+};
 
+export async function deleteProduct(
+  prevState: DeleteProductState,
+  formData: FormData
+) {
+  const validatedFields = DeleteProductSchema.safeParse({
+    productId: formData.get("productId"),
+  });
+
+  if (!validatedFields.success) {
+    return {
+      errors: validatedFields.error.flatten().fieldErrors,
+      message: "Missing Fields. Failed to Delete Product",
+    };
+  }
+
+  const { productId } = validatedFields.data;
+
+  try {
+    await prisma.review.deleteMany({ where: { productId: productId } });
+    await prisma.product.delete({ where: { id: productId } });
+  } catch (error) {
+    console.error(error);
+    return { message: "Database Error: Failed to Delete Product" };
+  }
+
+  revalidatePath("/settings/products");
+  redirect("/settings/products");
+}
 
 const productSchema = z.object({
   title: z.string().min(1),
@@ -101,13 +139,13 @@ export async function createProduct(formData: {
   try {
     const session = await auth();
 
-    if (!session?.user || session.user.role !== 'SELLER') {
-      return { success: false, message: 'Unauthorized' };
+    if (!session?.user || session.user.role !== "SELLER") {
+      return { success: false, message: "Unauthorized" };
     }
 
     const parsed = productSchema.safeParse(formData);
     if (!parsed.success) {
-      return { success: false, message: 'Invalid product data' };
+      return { success: false, message: "Invalid product data" };
     }
 
     const seller = await prisma.user.findUnique({
@@ -115,7 +153,7 @@ export async function createProduct(formData: {
     });
 
     if (!seller) {
-      return { success: false, message: 'User not found' };
+      return { success: false, message: "User not found" };
     }
 
     await prisma.product.create({
@@ -127,16 +165,13 @@ export async function createProduct(formData: {
 
     return { success: true };
   } catch (error) {
-    console.error('❌ Error creating product:', error);
-    return { success: false, message: 'Something went wrong' };
+    console.error("❌ Error creating product:", error);
+    return { success: false, message: "Something went wrong" };
   }
 }
 
-
-
-
 const editProduct = z.object({
-  id: z.string(), 
+  id: z.string(),
   title: z.string().min(1),
   description: z.string().min(1),
   price: z.coerce.number().positive(),
@@ -144,22 +179,21 @@ const editProduct = z.object({
   categoryId: z.string().min(1),
 });
 
-
 export async function updateProduct(formData: FormData) {
   try {
     const session = await auth();
 
-    if (!session?.user?.email || session.user.role !== 'SELLER') {
-      return { success: false, message: 'Unauthorized' };
+    if (!session?.user?.email || session.user.role !== "SELLER") {
+      return { success: false, message: "Unauthorized" };
     }
 
     const parsed = editProduct.safeParse({
-      id: formData.get('id'),
-      title: formData.get('title'),
-      description: formData.get('description'),
-      price: formData.get('price'),
-      imageUrl: formData.get('imageUrl'),
-      categoryId: formData.get('categoryId'),
+      id: formData.get("id"),
+      title: formData.get("title"),
+      description: formData.get("description"),
+      price: formData.get("price"),
+      imageUrl: formData.get("imageUrl"),
+      categoryId: formData.get("categoryId"),
     });
 
     if (!parsed.success) {
@@ -172,7 +206,7 @@ export async function updateProduct(formData: FormData) {
     });
 
     if (!product || product.seller.email !== session.user.email) {
-      return { success: false, message: 'Product not found or access denied' };
+      return { success: false, message: "Product not found or access denied" };
     }
 
     await prisma.product.update({
@@ -188,7 +222,7 @@ export async function updateProduct(formData: FormData) {
 
     return { success: true };
   } catch (err) {
-    console.error('❌ Error updating product:', err);
-    return { success: false, message: 'Something went wrong' };
+    console.error("❌ Error updating product:", err);
+    return { success: false, message: "Something went wrong" };
   }
 }
