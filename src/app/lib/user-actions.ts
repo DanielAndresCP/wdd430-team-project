@@ -269,7 +269,6 @@ export async function changePassword(
     password: formData.get("password"),
     confirmPassword: formData.get("confirmPassword"),
   });
-  
 
   if (!validatedFields.success) {
     return {
@@ -296,4 +295,18 @@ export async function changePassword(
 
   revalidatePath("/settings/account");
   redirect("/settings/account");
+}
+
+export async function fetchSingleUserById(id: string) {
+  const result = await prisma.user.findUnique({
+    where: { id: id },
+    include: {
+      products: {
+        include: { reviews: true },
+      },
+      reviews: true,
+    },
+  });
+
+  return result;
 }
