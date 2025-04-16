@@ -1,3 +1,4 @@
+"use server"
 import ProductCard from "./productCard";
 
 import { fetchProducts } from "@/app/lib/product-actions";
