@@ -4,66 +4,98 @@ import Image from "next/image";
 import ProductGrid from "@/components/productGrid";
 import StarRatingDisplay from "@/components/starRatingDisplay";
 import Pagination from "@/components/pagination";
+import { fetchSingleUserById } from "@/app/lib/user-actions";
+import { redirect } from "next/navigation";
+import { fetchCategories } from "@/app/lib/category-actions";
+import { formatDate } from "@/utils/formatting";
+import { fetchProductPages } from "@/app/lib/product-actions";
 
-import johnWodd from "&/creators/john-wood.png";
+function average(arr: number[]): number {
+  if (arr.length === 0) return NaN;
+  const sum = arr.reduce((acc, val) => acc + val, 0);
+  return sum / arr.length;
+}
 
 export async function generateMetadata({
   params,
 }: {
   params: Promise<{ id: string }>;
 }): Promise<Metadata> {
-  // read route params
   const { id } = await params;
 
-  // TODO fetch data
-  const creator = { displayName: `${id} Creator` };
+  const creator = await fetchSingleUserById(id);
 
   return {
-    title: creator.displayName,
+    title: creator?.name,
   };
 }
 
-export default async function Page(props: { params: Promise<{ id: string }> }) {
+export default async function Page(props: {
+  params: Promise<{ id: string }>;
+  searchParams?: Promise<{
+    page?: string;
+  }>;
+}) {
+  const searchParams = await props.searchParams;
+  const page = searchParams?.page || 1;
   const params = await props.params;
   const id = params.id;
 
-  // TODO: this must fetch the creator
-  const creator = {
-    displayName: "John Wood",
-    specialties: ["Woodworking", "Furniture", "Wooden Spoons"],
-    shortBio:
-      "I like making some cool wooden spoons, this is some lorem ipsum dolor sit amet, some more lorem ipsum dolor sit amet, and even more lorem ipsum dolor sit amet",
-    joinDate: new Date().toISOString().split("T")[0],
-    contact: "sales@example.com",
-    fullBio: `I still remember the first time I carved a wooden spoon. It was a rainy afternoon, and I was sitting in my grandfather’s old workshop, watching him work on a chair. I found a small scrap of wood, picked up a carving knife, and started whittling. The result was rough, uneven, and barely functional—but I was hooked.  
+  const creatorResult = await fetchSingleUserById(id);
 
-Growing up, I was always drawn to working with my hands. Whether it was fixing things around the house or sketching out ideas for small projects, I loved the process of creating something from nothing. But it wasn’t until years later, after working an unfulfilling office job, that I decided to turn my passion into my life’s work.  
+  if (!creatorResult) {
+    throw new Error("Creator expected but not found");
+  }
 
-Woodworking, for me, is more than just a craft—it’s a way of connecting with nature and tradition. I work primarily with locally sourced hardwoods, shaping each piece with care and patience. From sturdy farmhouse tables to delicate hand-carved spoons, I aim to create pieces that are not just functional but also full of character.  
+  if (creatorResult.role !== "SELLER") {
+    // If it is not a seller we redirect to homepage
+    redirect("/");
+  }
 
-A lot of my inspiration comes from old-world craftsmanship. I admire the way traditional artisans built things to last, with careful joinery and an eye for detail. Every time I pick up my tools, I strive to honor that legacy, making furniture and kitchenware that will stand the test of time.  
+  const avgRating = Math.ceil(
+    average(creatorResult.reviews.map((x) => x.rating))
+  );
 
-One of the most rewarding parts of my work is knowing that my pieces become part of people’s daily lives. A wooden spoon stirring a family meal, a dining table where stories are shared—these objects carry memories, and that’s what makes them special.  
-
-My journey as a woodworker has been one of learning, patience, and a deep appreciation for the material itself. Wood has a way of teaching you—about resilience, adaptability, and the beauty of imperfections. No two pieces are ever the same, and that’s what makes this craft so endlessly fascinating.  
-
-Whether you’re here to browse my work or simply share a love for handmade craftsmanship, I’m grateful to have you along for the journey.`,
+  const reviewsTotal = {
+    avgRating,
+    amountOfReviews: creatorResult.reviews.length,
   };
 
-  // TODO: this must be fetched, and it is not actually the avg but the median
-  const reviewsTotal = { avgRating: 4, amountOfReviews: 30 };
+  const productAmount = creatorResult.products.length;
 
-  // TODO: this must be fetched
-  const productAmount = 5;
+  const categories = await fetchCategories({
+    where: {
+      id: {
+        in: (creatorResult.settings as { specialties: Array<string> })
+          .specialties,
+      },
+    },
+  });
+
+  const creator = {
+    displayName: creatorResult.name,
+    specialties: categories.map((x) => x.displayName),
+    shortBio: (creatorResult.settings as { shortBio: string }).shortBio,
+    joinDate: formatDate(creatorResult.createdAt),
+    contact: creatorResult.email,
+    fullBio: (creatorResult.settings as { fullBio: string }).fullBio,
+    profilePicUrl: creatorResult.profilePictureUrl,
+  };
+
+  const productsQuery = JSON.stringify({
+    sellerId: id,
+  });
+
+  const totalPages = (await fetchProductPages(productsQuery)).totalPages;
 
   return (
     <main>
       <section className="container mx-auto p-6 grid grid-cols-1 sm:grid-cols-[1fr_2fr] gap-12">
         <aside className="prose max-w-none">
           <Image
-            src={johnWodd.src}
-            width={johnWodd.width}
-            height={johnWodd.height}
+            src={creator.profilePicUrl}
+            width={720}
+            height={720}
             alt={`Profile picture of ${creator.displayName}`}
             className="rounded-xl"
           />
@@ -98,8 +130,8 @@ Whether you’re here to browse my work or simply share a love for handmade craf
         <h2 className="text-3xl font-title font-semibold mb-4">
           {creator.displayName}'s Products
         </h2>
-        <ProductGrid query="temp" />
-        <Pagination totalPages={5} className="mt-5" />
+        <ProductGrid query={productsQuery} page={Number(page)} />
+        <Pagination totalPages={totalPages} className="mt-5" />
       </section>
     </main>
   );
