@@ -30,12 +30,10 @@ export default async function EditProductPage(props: {
   const product = await getProductById(id);
 
   if (!product) {
-    console.log("🔴 Producto no encontrado");
     return redirect("/");
   }
 
   if (product.seller.email !== permissions.userData.email) {
-    console.log("🔴 El producto no pertenece al seller logueado");
     console.log("Producto:", product);
     return redirect("/");
   }
