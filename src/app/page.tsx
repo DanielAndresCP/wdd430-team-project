@@ -2,6 +2,8 @@ import Link from "next/link";
 import ProductGrid from "@/components/productGrid";
 import CreatorGrid from "@/components/creatorGrid";
 
+export const dynamic = 'force-dynamic'
+
 export default function Home() {
   return (
     <main className="container mx-auto">

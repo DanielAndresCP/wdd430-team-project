@@ -2,6 +2,8 @@ import Link from "next/link";
 import { getAllProducts } from "@/app/lib/product-actions";
 import Image from "next/image";
 
+export const dynamic = 'force-dynamic'
+
 export default async function ProductsPage() {
   const products = await getAllProducts();
 
