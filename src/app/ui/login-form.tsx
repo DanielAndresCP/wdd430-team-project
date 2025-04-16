@@ -8,7 +8,6 @@ import {
   KeyIcon,
   ExclamationCircleIcon,
 } from '@heroicons/react/24/outline';
-import { ArrowRightIcon } from '@heroicons/react/20/solid';
 
 export default function LoginForm() {
   const searchParams = useSearchParams();
@@ -103,7 +102,7 @@ export default function LoginForm() {
         </button>
 
       <p className="text-center text-sm text-gray-600">
-        Don't have an account?{' '}
+        Don&lsquo;t have an account?{' '}
         <a href="/auth/register?reset=true" className="text-terracota-medium hover:underline">
           Sign up
         </a>

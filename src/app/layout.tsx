@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { Playfair_Display, Literata } from "next/font/google";
 import "./globals.css";
 import { Toaster } from 'sonner';
-import { SessionProvider } from 'next-auth/react'; // 👈 importá esto
 
 
 import Header from "@/components/header";

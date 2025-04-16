@@ -14,7 +14,6 @@ export default function AdminProductCard({
   name,
   price,
   description,
-  href,
   width,
   height,
   className = "",
@@ -24,7 +23,6 @@ export default function AdminProductCard({
   name: string;
   price: number;
   description: string;
-  href: string;
   width: number;
   height: number;
   className?: string;

@@ -13,7 +13,7 @@ export default function SettingsNavBar({
 
   return (
     <nav className="flex flex-col gap-2">
-      {settingsNavLinks.map((x, i, arr) => (
+      {settingsNavLinks.map((x) => (
         <Link
           href={x.href}
           key={x.href}

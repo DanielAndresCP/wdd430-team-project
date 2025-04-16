@@ -28,7 +28,6 @@ export default async function AdminProductGrid({
           imageSrc={x.imageUrl}
           name={x.title}
           price={x.price}
-          href={`/products/${x.id}`}
           height={x.imgHeight}
           width={x.imgWidth}
           className="max-w-xs"

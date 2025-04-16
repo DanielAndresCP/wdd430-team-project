@@ -4,8 +4,9 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { updateProduct } from '@/app/lib/product-actions';
 import { fetchCategories } from '@/app/lib/client/fetch-categories';
+import { Product } from '@prisma/client';
 
-export default function EditProductForm({ product }: { product: any }) {
+export default function EditProductForm({ product }: { product: Product }) {
   const router = useRouter();
   const [form, setForm] = useState({
     id: product.id,

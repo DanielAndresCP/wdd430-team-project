@@ -1,13 +1,4 @@
-import Image from "next/image";
-import ProductGrid from "@/components/productGrid";
-import StarRatingDisplay from "@/components/starRatingDisplay";
 import Pagination from "@/components/pagination";
-import { fetchSingleUserById } from "@/app/lib/user-actions";
-import { redirect } from "next/navigation";
-import { fetchCategories } from "@/app/lib/category-actions";
-import { formatDate } from "@/utils/formatting";
-import { fetchProductPages } from "@/app/lib/product-actions";
-import { Suspense } from "react";
 import CardGridSkeleton from "@/components/cardGridSkeleton";
 
 export default function Loading() {

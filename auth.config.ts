@@ -15,6 +15,7 @@ export const authConfig = {
     },
 
     async jwt({ token, user }) {
+      // TODO: Esto no se como lo resuelven
       if (user) {
         token.role = user.role; // guarda el role en el token
       }

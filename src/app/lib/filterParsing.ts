@@ -5,7 +5,7 @@ export function fuseFilters(...args: Array<string | object>) {
     if (typeof item === "string") {
       try {
         parsedFilters.push(JSON.parse(item));
-      } catch (error) {
+      } catch {
         continue;
       }
     }

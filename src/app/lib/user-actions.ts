@@ -74,7 +74,7 @@ const ChangePasswordSchema = z
 export async function fetchSellers(query: string, page: number) {
   const offset = (page - 1) * SELLERS_PER_PAGE;
 
-  const options: { skip: number; take: number; where: Object } = {
+  const options: { skip: number; take: number; where: object } = {
     skip: offset,
     take: SELLERS_PER_PAGE,
     where: fuseFilters(query, { role: "SELLER" }),
