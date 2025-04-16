@@ -7,8 +7,8 @@ import clsx from "clsx";
 
 const links = [
   {
-    name: "Page Link",
-    href: "#1",
+    name: "Products",
+    href: "/products",
   },
   {
     name: "Page Link",

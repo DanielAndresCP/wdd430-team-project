@@ -1,23 +1,30 @@
 'use client';
 
-import { useActionState } from 'react';
+import { useActionState,useEffect } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { authenticate } from '@/app/lib/actions';
+import { useRouter } from 'next/navigation';
 import {
   AtSymbolIcon,
   KeyIcon,
   ExclamationCircleIcon,
 } from '@heroicons/react/24/outline';
-import { ArrowRightIcon } from '@heroicons/react/20/solid';
 
 export default function LoginForm() {
   const searchParams = useSearchParams();
   const callbackUrl = searchParams.get('callbackUrl') || '/';
+  const router = useRouter();
 
   const [errorMessage, formAction, isPending] = useActionState(
     authenticate,
     undefined,
   );
+ useEffect(() => {
+  if (typeof errorMessage === 'object' && errorMessage?.success) {
+    router.refresh();
+    router.push(callbackUrl);
+  }
+}, [errorMessage]);
 
   return (
     <form action={formAction} className="space-y-5">
@@ -111,6 +118,3 @@ export default function LoginForm() {
     </form>
   );
 }
-
-
-
