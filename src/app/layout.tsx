@@ -36,13 +36,10 @@ export default function RootLayout({
       <body
         className={`${playfairDisplay.variable} ${literata.variable} antialiased bg-terracota-lighter`}
       >
-        {/* <SessionProvider> */}
         <Toaster position="top-center" richColors closeButton />
-
         <Header />
         {children}
         <Footer />
-        {/* </SessionProvider> */}
       </body>
     </html>
   );
