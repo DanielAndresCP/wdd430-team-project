@@ -11,8 +11,8 @@ const links = [
     href: "/products",
   },
   {
-    name: "Page Link",
-    href: "#2",
+    name: "Settings",
+    href: "/settings/account",
   },
   {
     name: "Page Link",

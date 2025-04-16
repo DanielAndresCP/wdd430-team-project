@@ -45,7 +45,7 @@ export default function AdminProductCard({
       <p>{description}</p>
       <div className="mt-3">
         <Link
-          href="#"
+          href={`/products/edit/${productId}`}
           className="inline-block w-12 py-1 px-2 max-w-10 rounded-full bg-blue-900 text-white mr-2"
         >
           <span className="sr-only">Edit {name}</span>

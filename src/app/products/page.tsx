@@ -21,6 +21,8 @@ export default async function ProductsPage() {
               src={product.imageUrl}
               alt={product.title}
               className="w-full h-48 object-cover rounded-md"
+              width={320}
+              height={190}
             />
             <h2 className="text-xl font-semibold text-terracota-dark mt-2">
               {product.title}
