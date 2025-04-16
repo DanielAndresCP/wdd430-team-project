@@ -2,11 +2,12 @@
 import NextAuth from 'next-auth';
 import Credentials from 'next-auth/providers/credentials';
 import { authConfig } from './auth.config';
-import { PrismaClient } from '@prisma/client';
+// import { PrismaClient } from '@prisma/client';
 import bcrypt from 'bcrypt';
 import { z } from 'zod';
+import { prisma } from '@/app/lib/prisma';
 
-const prisma = new PrismaClient();
+// const prisma = new PrismaClient();
 
 export const { auth, signIn, signOut } = NextAuth({
   ...authConfig,
@@ -30,7 +31,6 @@ export const { auth, signIn, signOut } = NextAuth({
             console.log('❌ Usuario no encontrado');
             return null;
           }
-
           const isValid = await bcrypt.compare(password, user.password);
           if (!isValid) {
             console.log('❌ Contraseña incorrecta');
@@ -38,11 +38,11 @@ export const { auth, signIn, signOut } = NextAuth({
           }
 
           console.log('✅ Login exitoso:', user.email);
-
           return {
             id: user.id,
             email: user.email,
             name: user.name,
+            role: user.role,
           };
         } catch (err) {
           console.error('🔴 Error en authorize():', err);
